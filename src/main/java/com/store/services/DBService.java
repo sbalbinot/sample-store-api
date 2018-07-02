@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.store.domain.Categoria;
@@ -19,6 +20,7 @@ import com.store.domain.PagamentoComCartao;
 import com.store.domain.Pedido;
 import com.store.domain.Produto;
 import com.store.domain.enums.EstadoPagamento;
+import com.store.domain.enums.Perfil;
 import com.store.domain.enums.TipoCliente;
 import com.store.repositories.CategoriaRepository;
 import com.store.repositories.CidadeRepository;
@@ -33,6 +35,9 @@ import com.store.repositories.ProdutoRepository;
 @Service
 public class DBService {
 
+	@Autowired
+	BCryptPasswordEncoder encoder;
+	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
@@ -91,10 +96,14 @@ public class DBService {
 		Cidade c2 = new Cidade(null, "São Paulo", est2);
 		Cidade c3 = new Cidade(null, "Campinas", est2);
 		
-		Cliente cli1 = new Cliente(null, "Stephano Balbinot", "balbinotstephano@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		Cliente cli1 = new Cliente(null, "Administrador", "admin@gmail.com", "62251437266", TipoCliente.PESSOAFISICA, encoder.encode("123"));
+		Cliente cli2 = new Cliente(null, "Stephano Balbinot", "balbinotstephano@gmail.com", "75228856471", TipoCliente.PESSOAFISICA, encoder.encode("123"));
+		
+		cli1.addPerfil(Perfil.ADMIN);
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+		Endereco e3 = new Endereco(null, "Rua Amazonas", "111", null, "Centro", "95877000", cli2, c2);
 		
 		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
 		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
@@ -132,9 +141,11 @@ public class DBService {
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2, c3));
 		
-		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+		cli1.getTelefones().addAll(Arrays.asList("927363323", "993838393"));
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		cli2.getTelefones().addAll(Arrays.asList("999763421", "995537903"));
+		cli1.getEnderecos().addAll(Arrays.asList(e3));
 		
 		ped1.setPagamento(pagto1);
 		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
@@ -145,8 +156,8 @@ public class DBService {
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
