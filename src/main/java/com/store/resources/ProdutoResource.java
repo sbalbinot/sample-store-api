@@ -29,8 +29,8 @@ public class ProdutoResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ResponseEntity<Page<ProdutoDTO>> search(
+	@RequestMapping(value = "/page", method = RequestMethod.GET)
+	public ResponseEntity<Page<ProdutoDTO>> pagination(
 			@RequestParam(value = "nome", defaultValue = "") String nome,
 			@RequestParam(value = "categorias", defaultValue = "") String categorias,
 			@RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
@@ -39,7 +39,7 @@ public class ProdutoResource {
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 		String nomeDecoded = URL.decodeParam(nome);
 		List<Integer> ids = URL.decodeIntList(categorias);
-		Page<Produto> page = service.search(nomeDecoded, ids, pageNumber, pageSize, orderBy, direction);
+		Page<Produto> page = service.pagination(nomeDecoded, ids, pageNumber, pageSize, orderBy, direction);
 		Page<ProdutoDTO> pageDto = page.map(obj -> new ProdutoDTO(obj));
 		return ResponseEntity.ok().body(pageDto);
 	}
