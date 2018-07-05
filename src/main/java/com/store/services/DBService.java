@@ -86,7 +86,7 @@ public class DBService {
 		Produto p7 = new Produto(null, "Televisão", 1200.00);
 		Produto p8 = new Produto(null, "Roçadeira", 800.00);
 		Produto p9 = new Produto(null, "Abajour", 100.00);
-		Produto p10 = new Produto(null, "Quadro", 180.00);
+		Produto p10 = new Produto(null, "Pendente", 180.00);
 		Produto p11 = new Produto(null, "Shampoo", 90.00);
 		
 		Estado est1 = new Estado(null, "Minas Gerais");
